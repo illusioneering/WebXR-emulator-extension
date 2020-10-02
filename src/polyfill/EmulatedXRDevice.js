@@ -25,6 +25,12 @@ const dispatchCustomEvent = (type, detail) => {
   }));
 };
 
+// added by Evan Suma Rosenberg
+const BUTTON = {
+  SELECT: 0,
+  SQUEEZE: 1
+};
+
 export default class EmulatedXRDevice extends XRDevice {
 
   // @TODO: write config parameter comment
@@ -632,12 +638,25 @@ export default class EmulatedXRDevice extends XRDevice {
     }
   }
 
+  // modified by Evan Suma Rosenberg
   _updateInputButtonPressed(pressed, controllerIndex, buttonIndex) {
+
+    const gamepadImpl = this.gamepadInputSources[controllerIndex];
+    let actualButtonIndex = 0;
+    switch(buttonIndex) {
+      case BUTTON.SELECT:
+        actualButtonIndex = gamepadImpl.primaryButtonIndex;
+        break;
+      case BUTTON.SQUEEZE:
+        actualButtonIndex = gamepadImpl.primarySqueezeButtonIndex;
+        break;
+    }
+
     if (controllerIndex >= this.gamepads.length) { return; }
     const gamepad = this.gamepads[controllerIndex];
     if (buttonIndex >= gamepad.buttons.length) { return; }
-    gamepad.buttons[buttonIndex].pressed = pressed;
-    gamepad.buttons[buttonIndex].value = pressed ? 1.0 : 0.0;
+    gamepad.buttons[actualButtonIndex].pressed = pressed;
+    gamepad.buttons[actualButtonIndex].value = pressed ? 1.0 : 0.0;
   }
 
   _initializeControllers(config) {

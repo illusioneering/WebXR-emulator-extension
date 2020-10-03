@@ -132,7 +132,9 @@ const DEVICE = {
 
 const BUTTON = {
   SELECT: 0,
-  SQUEEZE: 1
+  SQUEEZE: 1,
+  AX: 2,
+  BY: 3
 };
 
 const ASSET_PATH = {};
@@ -152,9 +154,13 @@ const states = {
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER] = {};
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.SELECT] = false;
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.SQUEEZE] = false;
+states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.AX] = false;
+states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.BY] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER] = {};
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SELECT] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SQUEEZE] = false;
+states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.AX] = false;
+states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.BY] = false;
 
 const deviceCapabilities = {};
 deviceCapabilities[DEVICE.HEADSET] = {
@@ -413,11 +419,15 @@ const updateAssetNodes = (deviceDefinition) => {
   if (assetNodes[DEVICE.RIGHT_CONTROLLER]) {
     states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.SELECT] = false;
     states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.SQUEEZE] = false;
+    states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.AX] = false;
+    states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.BY] = false;
     updateControllerColor(DEVICE.RIGHT_CONTROLLER);
   }
   if (assetNodes[DEVICE.LEFT_CONTROLLER]) {
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SELECT] = false;
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SQUEEZE] = false;
+    states.buttonPressed[DEVICE.property][BUTTON.AX] = false;
+    states.buttonPressed[DEVICE.property][BUTTON.BY] = false;
     updateControllerColor(DEVICE.LEFT_CONTROLLER);
   }
 
@@ -456,10 +466,18 @@ const updateAssetNodes = (deviceDefinition) => {
   document.getElementById('leftSelectButton').style.display = 'none';
   document.getElementById('rightSqueezeButton').style.display = 'none';
   document.getElementById('leftSqueezeButton').style.display = 'none';
+  document.getElementById('rightAXButton').style.display = 'none';
+  document.getElementById('leftAXButton').style.display = 'none';
+  document.getElementById('rightBYButton').style.display = 'none';
+  document.getElementById('leftBYButton').style.display = 'none';
   updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.SELECT, false);
   updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.SQUEEZE, false);
+  updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.AX, false);
+  updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.BY, false);
   updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.SELECT, false);
   updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.SQUEEZE, false);
+  updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.AX, false);
+  updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.BY, false);
 
   // secondly load new assets and enable necessary panel controls
 
@@ -495,6 +513,8 @@ const updateAssetNodes = (deviceDefinition) => {
     document.getElementById('rightControllerComponent').style.display = 'flex';
     if (hasImmersiveVR) {
       document.getElementById('rightSelectButton').style.display = '';
+      document.getElementById('rightAXButton').style.display = '';
+      document.getElementById('rightBYButton').style.display = '';
     }
     if (deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton) {
       document.getElementById('rightSqueezeButton').style.display = '';
@@ -505,6 +525,8 @@ const updateAssetNodes = (deviceDefinition) => {
     document.getElementById('leftControllerComponent').style.display = 'flex';
     if (hasImmersiveVR) {
       document.getElementById('leftSelectButton').style.display = '';
+      document.getElementById('leftAXButton').style.display = '';
+      document.getElementById('leftBYButton').style.display = '';
     }
     if (deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton) {
       document.getElementById('leftSqueezeButton').style.display = '';
@@ -520,7 +542,8 @@ const updateAssetNodes = (deviceDefinition) => {
 
 const updateControllerColor = (key) => {
   const node = assetNodes[key];
-  const pressed = states.buttonPressed[key][BUTTON.SELECT] || states.buttonPressed[key][BUTTON.SQUEEZE];
+  const pressed = states.buttonPressed[key][BUTTON.SELECT] || states.buttonPressed[key][BUTTON.SQUEEZE] || 
+                  states.buttonPressed[key][BUTTON.AX] || states.buttonPressed[key][BUTTON.BY];
   node.traverse(object => {
     if (!object.material) {
       return;
@@ -645,8 +668,27 @@ const updateControllerPropertyComponent = (key) => {
 };
 
 const updateTriggerButtonColor = (key, buttonKey, pressed) => {
+  
   let buttonId = key === DEVICE.RIGHT_CONTROLLER ? 'right' : 'left';
-  buttonId += buttonKey === BUTTON.SELECT ? 'Select' : 'Squeeze';
+
+  //buttonId += buttonKey === BUTTON.SELECT ? 'Select' : 'Squeeze';
+
+  switch(buttonKey)
+  {
+    case BUTTON.SELECT:
+      buttonId += 'Select';
+      break;
+    case BUTTON.SQUEEZE:
+      buttonId += 'Squeeze';
+      break;
+    case BUTTON.AX:
+      buttonId += 'AX';
+      break;
+    case BUTTON.BY:
+      buttonId += 'BY';
+      break;
+  }
+
   buttonId += 'Button';
   const button = document.getElementById(buttonId);
   button.classList.toggle('pressed', pressed);
@@ -731,6 +773,24 @@ document.getElementById('rightSqueezeButton').addEventListener('click', event =>
 document.getElementById('leftSqueezeButton').addEventListener('click', event => {
   toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.SQUEEZE);
 }, false);
+
+document.getElementById('rightAXButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.RIGHT_CONTROLLER, BUTTON.AX);
+}, false);
+
+document.getElementById('leftAXButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.AX);
+}, false);
+
+document.getElementById('rightBYButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.RIGHT_CONTROLLER, BUTTON.BY);
+}, false);
+
+document.getElementById('leftBYButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.BY);
+}, false);
+
+
 
 document.getElementById('resetPoseButton').addEventListener('click', event => {
   for (const key in assetNodes) {

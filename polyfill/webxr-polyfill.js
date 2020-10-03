@@ -5255,7 +5255,8 @@ to native implementations of the API.`;
                   }
                 }
                 class GamepadXRInputSource {
-                  constructor(polyfill, display, primaryButtonIndex = 0, primarySqueezeButtonIndex = -1) {
+                  constructor(polyfill, display, primaryButtonIndex = 0, primarySqueezeButtonIndex = -1,
+                              axButtonIndex = -1, byButtonIndex = -1) {
                     this.polyfill = polyfill;
                     this.display = display;
                     this.nativeGamepad = null;
@@ -5272,6 +5273,8 @@ to native implementations of the API.`;
                     this.handedness = '';
                     this.targetRayMode = 'gaze';
                     this.armModel = null;
+                    this.axButtonIndex = axButtonIndex;
+                    this.byButtonIndex = byButtonIndex;
                   }
                   get profiles() {
                     return this.gamepad ? this.gamepad._profiles : [];
@@ -36426,7 +36429,9 @@ host this content on a secure origin for the best user experience.
                 };
                 const BUTTON = {
                   SELECT: 0,
-                  SQUEEZE: 1
+                  SQUEEZE: 1,
+                  AX: 2,
+                  BY: 3
                 };
                 class EmulatedXRDevice extends XRDevice {
                   constructor(global, config={}) {
@@ -36908,6 +36913,12 @@ host this content on a secure origin for the best user experience.
                       case BUTTON.SQUEEZE:
                         actualButtonIndex = gamepadImpl.primarySqueezeButtonIndex;
                         break;
+                      case BUTTON.AX:
+                        actualButtonIndex = gamepadImpl.axButtonIndex;
+                        break;
+                      case BUTTON.BY:
+                        actualButtonIndex = gamepadImpl.byButtonIndex;
+                        break;
                     }
                     if (controllerIndex >= this.gamepads.length) { return; }
                     const gamepad = this.gamepads[controllerIndex];
@@ -36927,8 +36938,10 @@ host this content on a secure origin for the best user experience.
                       const buttonNum = controller.buttonNum || 0;
                       const primaryButtonIndex = controller.primaryButtonIndex !== undefined ? controller.primaryButtonIndex : 0;
                       const primarySqueezeButtonIndex = controller.primarySqueezeButtonIndex !== undefined ? controller.primarySqueezeButtonIndex : -1;
+                      const axButtonIndex = controller.axButtonIndex !== undefined ? controller.axButtonIndex : -1;
+                      const byButtonIndex = controller.byButtonIndex !== undefined ? controller.byButtonIndex : -1;
                       this.gamepads.push(createGamepad(id, i === 0 ? 'right' : 'left', buttonNum, hasPosition));
-                      const imputSourceImpl = new GamepadXRInputSource(this, {}, primaryButtonIndex, primarySqueezeButtonIndex);
+                      const imputSourceImpl = new GamepadXRInputSource(this, {}, primaryButtonIndex, primarySqueezeButtonIndex, axButtonIndex, byButtonIndex);
                       imputSourceImpl.active = !this.arDevice;
                       this.gamepadInputSources.push(imputSourceImpl);
                     }
@@ -36950,6 +36963,12 @@ host this content on a secure origin for the best user experience.
                         }
                         if (inputSourceImpl.primarySqueezeButtonIndex !== -1) {
                           gamepad.buttons[inputSourceImpl.primarySqueezeButtonIndex].pressed = false;
+                        }
+                        if (inputSourceImpl.axButtonIndex !== -1) {
+                          gamepad.buttons[inputSourceImpl.axButtonIndex].pressed = false;
+                        }
+                        if (inputSourceImpl.byButtonIndex !== -1) {
+                          gamepad.buttons[inputSourceImpl.byButtonIndex].pressed = false;
                         }
                       }
                       this.requestAnimationFrame(() => {

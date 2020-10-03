@@ -94,6 +94,8 @@
           "buttonNum": 7,
           "primaryButtonIndex": 1,
           "primarySqueezeButtonIndex": 2,
+          "axButtonIndex": 3,
+          "byButtonIndex": 4,
           "hasPosition": true,
           "hasRotation": true,
           "hasSqueezeButton": true
@@ -103,6 +105,8 @@
           "buttonNum": 7,
           "primaryButtonIndex": 1,
           "primarySqueezeButtonIndex": 2,
+          "axButtonIndex": 3,
+          "byButtonIndex": 4,
           "hasPosition": true,
           "hasRotation": true,
           "hasSqueezeButton": true

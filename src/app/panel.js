@@ -135,7 +135,11 @@ const BUTTON = {
   SQUEEZE: 1,
   THUMBSTICK: 2,
   AX: 3,
-  BY: 4
+  BY: 4,
+  UP: 5,
+  DOWN: 6,
+  LEFT: 7,
+  RIGHT: 8
 };
 
 const ASSET_PATH = {};
@@ -158,12 +162,20 @@ states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.SQUEEZE] = false;
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.THUMBSTICK] = false;
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.AX] = false;
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.BY] = false;
+states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.UP] = false;
+states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.DOWN] = false;
+states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.LEFT] = false;
+states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.RIGHT] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER] = {};
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SELECT] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SQUEEZE] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.THUMBSTICK] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.AX] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.BY] = false;
+states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.UP] = false;
+states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.DOWN] = false;
+states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.LEFT] = false;
+states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.RIGHT] = false;
 
 const deviceCapabilities = {};
 deviceCapabilities[DEVICE.HEADSET] = {
@@ -176,7 +188,8 @@ deviceCapabilities[DEVICE.CONTROLLER] = {
   hasSqueezeButton: false,
   hasThumbstickButton: false,
   hasAXButton: false,
-  hasBYButton: false
+  hasBYButton: false,
+  hasXYAxes: false
 };
 
 const transformControls = {};
@@ -428,6 +441,10 @@ const updateAssetNodes = (deviceDefinition) => {
     states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.THUMBSTICK] = false;
     states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.AX] = false;
     states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.BY] = false;
+    states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.UP] = false;
+    states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.DOWN] = false;
+    states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.LEFT] = false;
+    states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.RIGHT] = false;
     updateControllerColor(DEVICE.RIGHT_CONTROLLER);
   }
   if (assetNodes[DEVICE.LEFT_CONTROLLER]) {
@@ -436,6 +453,10 @@ const updateAssetNodes = (deviceDefinition) => {
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.THUMBSTICK] = false;
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.AX] = false;
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.BY] = false;
+    states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.UP] = false;
+    states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.DOWN] = false;
+    states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.LEFT] = false;
+    states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.RIGHT] = false;
     updateControllerColor(DEVICE.LEFT_CONTROLLER);
   }
 
@@ -467,6 +488,7 @@ const updateAssetNodes = (deviceDefinition) => {
   deviceCapabilities[DEVICE.CONTROLLER].hasThumbstickButton = false;
   deviceCapabilities[DEVICE.CONTROLLER].hasAXButton = false;
   deviceCapabilities[DEVICE.CONTROLLER].hasBYButton = false;
+  deviceCapabilities[DEVICE.CONTROLLER].hasXYAxes = false;
   document.getElementById('stereoEffectLabel').style.display = 'none';
   document.getElementById('headsetComponent').style.display = 'none';
   document.getElementById('rightControllerComponent').style.display = 'none';
@@ -483,6 +505,14 @@ const updateAssetNodes = (deviceDefinition) => {
   document.getElementById('leftAXButton').style.display = 'none';
   document.getElementById('rightBYButton').style.display = 'none';
   document.getElementById('leftBYButton').style.display = 'none';
+  document.getElementById('leftUpButton').style.display = 'none';
+  document.getElementById('leftDownButton').style.display = 'none';
+  document.getElementById('leftLeftButton').style.display = 'none';
+  document.getElementById('leftRightButton').style.display = 'none';
+  document.getElementById('rightUpButton').style.display = 'none';
+  document.getElementById('rightDownButton').style.display = 'none';
+  document.getElementById('rightLeftButton').style.display = 'none';
+  document.getElementById('rightRightButton').style.display = 'none';
   updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.SELECT, false);
   updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.SQUEEZE, false);
   updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.THUMBSTICK, false);
@@ -493,6 +523,10 @@ const updateAssetNodes = (deviceDefinition) => {
   updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.THUMBSTICK, false);
   updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.AX, false);
   updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.BY, false);
+  updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.UP, false);
+  updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.DOWN, false);
+  updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.LEFT, false);
+  updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.RIGHT, false);
 
   // secondly load new assets and enable necessary panel controls
 
@@ -509,6 +543,7 @@ const updateAssetNodes = (deviceDefinition) => {
   deviceCapabilities[DEVICE.CONTROLLER].hasThumbstickButton = hasRightController && deviceDefinition.controllers[0].hasThumbstickButton;
   deviceCapabilities[DEVICE.CONTROLLER].hasAXButton = hasRightController && deviceDefinition.controllers[0].hasAXButton;
   deviceCapabilities[DEVICE.CONTROLLER].hasBYButton = hasRightController && deviceDefinition.controllers[0].hasBYButton;
+  deviceCapabilities[DEVICE.CONTROLLER].hasXYAxes = hasRightController && deviceDefinition.controllers[0].hasXYAxes;
 
   const hasPosition = deviceCapabilities[DEVICE.HEADSET].hasPosition ||
     deviceCapabilities[DEVICE.CONTROLLER].hasPosition;
@@ -544,6 +579,12 @@ const updateAssetNodes = (deviceDefinition) => {
     if (deviceCapabilities[DEVICE.CONTROLLER].hasBYButton) {
       document.getElementById('rightBYButton').style.display = '';
     }
+    if (deviceCapabilities[DEVICE.CONTROLLER].hasXYAxes) {
+      document.getElementById('rightUpButton').style.display = '';
+      document.getElementById('rightDownButton').style.display = '';
+      document.getElementById('rightLeftButton').style.display = '';
+      document.getElementById('rightRightButton').style.display = '';
+    }
   }
 
   if (hasLeftController) {
@@ -563,6 +604,12 @@ const updateAssetNodes = (deviceDefinition) => {
     if (deviceCapabilities[DEVICE.CONTROLLER].hasBYButton) {
       document.getElementById('leftBYButton').style.display = '';
     }
+    if (deviceCapabilities[DEVICE.CONTROLLER].hasXYAxes) {
+      document.getElementById('leftUpButton').style.display = '';
+      document.getElementById('leftDownButton').style.display = '';
+      document.getElementById('leftLeftButton').style.display = '';
+      document.getElementById('leftRightButton').style.display = '';
+    }
   }
 
   if (hasHeadset || hasRightController || hasLeftController) {
@@ -576,7 +623,9 @@ const updateControllerColor = (key) => {
   const node = assetNodes[key];
   const pressed = states.buttonPressed[key][BUTTON.SELECT] || states.buttonPressed[key][BUTTON.SQUEEZE] || 
                   states.buttonPressed[key][BUTTON.THUMBSTICK] || states.buttonPressed[key][BUTTON.AX] || 
-                  states.buttonPressed[key][BUTTON.BY];
+                  states.buttonPressed[key][BUTTON.BY] || states.buttonPressed[key][BUTTON.UP] ||
+                  states.buttonPressed[key][BUTTON.DOWN] || states.buttonPressed[key][BUTTON.LEFT] ||
+                  states.buttonPressed[key][BUTTON.RIGHT];
   node.traverse(object => {
     if (!object.material) {
       return;
@@ -723,6 +772,18 @@ const updateTriggerButtonColor = (key, buttonKey, pressed) => {
     case BUTTON.BY:
       buttonId += 'BY';
       break;
+    case BUTTON.UP:
+      buttonId += 'Up';
+      break;
+    case BUTTON.DOWN:
+      buttonId += 'Down';
+      break;
+    case BUTTON.LEFT:
+      buttonId += 'Left';
+      break;
+    case BUTTON.RIGHT:
+      buttonId += 'Right';
+      break;
   }
 
   buttonId += 'Button';
@@ -787,6 +848,29 @@ const toggleControlMode = (key) => {
 };
 
 const toggleButtonPressed = (key, buttonKey) => {
+
+  // if we are toggling on an axis button
+  // then toggle off the opposite axis button
+  if(!states.buttonPressed[key][buttonKey])
+  {
+    if(buttonKey == BUTTON.UP && states.buttonPressed[key][BUTTON.DOWN])
+    {
+      toggleButtonPressed(key, BUTTON.DOWN);
+    }
+    else if(buttonKey == BUTTON.DOWN && states.buttonPressed[key][BUTTON.UP])
+    {
+      toggleButtonPressed(key, BUTTON.UP);
+    }
+    else if(buttonKey == BUTTON.LEFT && states.buttonPressed[key][BUTTON.RIGHT])
+    {
+      toggleButtonPressed(key, BUTTON.RIGHT);
+    }
+    else if(buttonKey == BUTTON.RIGHT && states.buttonPressed[key][BUTTON.LEFT])
+    {
+      toggleButtonPressed(key, BUTTON.LEFT);
+    }
+  }
+
   states.buttonPressed[key][buttonKey] = !states.buttonPressed[key][buttonKey];
   const pressed = states.buttonPressed[key][buttonKey];
   notifyInputButtonPressed(key, buttonKey, pressed);
@@ -832,6 +916,38 @@ document.getElementById('rightBYButton').addEventListener('click', event => {
 
 document.getElementById('leftBYButton').addEventListener('click', event => {
   toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.BY);
+}, false);
+
+document.getElementById('leftUpButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.UP);
+}, false);
+
+document.getElementById('leftDownButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.DOWN);
+}, false);
+
+document.getElementById('leftLeftButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.LEFT);
+}, false);
+
+document.getElementById('leftRightButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.RIGHT);
+}, false);
+
+document.getElementById('rightUpButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.RIGHT_CONTROLLER, BUTTON.UP);
+}, false);
+
+document.getElementById('rightDownButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.RIGHT_CONTROLLER, BUTTON.DOWN);
+}, false);
+
+document.getElementById('rightLeftButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.RIGHT_CONTROLLER, BUTTON.LEFT);
+}, false);
+
+document.getElementById('rightRightButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.RIGHT_CONTROLLER, BUTTON.RIGHT);
 }, false);
 
 

@@ -45,7 +45,8 @@
           "hasSqueezeButton": true,
           "hasThumbstickButton": false,
           "hasAXButton": false,
-          "hasBYButton": false
+          "hasBYButton": false,
+          "hasXYAxes": false
         },
         {
           "id": "OpenVR Gamepad",
@@ -57,7 +58,8 @@
           "hasSqueezeButton": true,
           "hasThumbstickButton": false,
           "hasAXButton": false,
-          "hasBYButton": false
+          "hasBYButton": false,
+          "hasXYAxes": false
         }
       ]
     },
@@ -82,7 +84,8 @@
           "hasSqueezeButton": false,
           "hasThumbstickButton": false,
           "hasAXButton": false,
-          "hasBYButton": false
+          "hasBYButton": false,
+          "hasXYAxes": false
         }
       ]
     },
@@ -111,7 +114,8 @@
           "hasSqueezeButton": true,
           "hasThumbstickButton": true,
           "hasAXButton": true,
-          "hasBYButton": true
+          "hasBYButton": true,
+          "hasXYAxes": true
         },
         {
           "id": "Oculus Touch (Left)",
@@ -126,7 +130,8 @@
           "hasSqueezeButton": true,
           "hasThumbstickButton": true,
           "hasAXButton": true,
-          "hasBYButton": true
+          "hasBYButton": true,
+          "hasXYAxes": true
         }
       ]
     },
@@ -152,7 +157,8 @@
           "hasRotation": true,
           "hasThumbstickButton": false,
           "hasAXButton": false,
-          "hasBYButton": false
+          "hasBYButton": false,
+          "hasXYAxes": false
         },
         {
           "buttonNum": 1,
@@ -161,7 +167,8 @@
           "hasRotation": true,
           "hasThumbstickButton": false,
           "hasAXButton": false,
-          "hasBYButton": false
+          "hasBYButton": false,
+          "hasXYAxes": false
         }
       ],
       "resolution": {
@@ -194,7 +201,8 @@
           "hasRotation": true,
           "hasThumbstickButton": false,
           "hasAXButton": false,
-          "hasBYButton": false
+          "hasBYButton": false,
+          "hasXYAxes": false
         }
       ]
     }

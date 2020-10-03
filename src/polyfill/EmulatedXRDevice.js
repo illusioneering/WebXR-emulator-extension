@@ -31,7 +31,11 @@ const BUTTON = {
   SQUEEZE: 1,
   THUMBSTICK: 2,
   AX: 3,
-  BY: 4
+  BY: 4,
+  UP: 5,
+  DOWN: 6,
+  LEFT: 7,
+  RIGHT: 8
 };
 
 export default class EmulatedXRDevice extends XRDevice {
@@ -645,30 +649,50 @@ export default class EmulatedXRDevice extends XRDevice {
   _updateInputButtonPressed(pressed, controllerIndex, buttonIndex) {
 
     const gamepadImpl = this.gamepadInputSources[controllerIndex];
-    let actualButtonIndex = 0;
-    switch(buttonIndex) {
-      case BUTTON.SELECT:
-        actualButtonIndex = gamepadImpl.primaryButtonIndex;
-        break;
-      case BUTTON.SQUEEZE:
-        actualButtonIndex = gamepadImpl.primarySqueezeButtonIndex;
-        break;
-      case BUTTON.THUMBSTICK:
-        actualButtonIndex = gamepadImpl.thumbstickButtonIndex;
-        break;
-      case BUTTON.AX:
-        actualButtonIndex = gamepadImpl.axButtonIndex;
-        break;
-      case BUTTON.BY:
-        actualButtonIndex = gamepadImpl.byButtonIndex;
-        break;
-    }
-
     if (controllerIndex >= this.gamepads.length) { return; }
     const gamepad = this.gamepads[controllerIndex];
-    if (buttonIndex >= gamepad.buttons.length) { return; }
-    gamepad.buttons[actualButtonIndex].pressed = pressed;
-    gamepad.buttons[actualButtonIndex].value = pressed ? 1.0 : 0.0;
+
+    if(buttonIndex == BUTTON.UP)
+    {
+      gamepad.axes[1] = pressed ? -1.0 : 0.0; 
+    }
+    else if(buttonIndex == BUTTON.DOWN)
+    {
+      gamepad.axes[1] = pressed ? 1.0 : 0.0; 
+    }
+    else if(buttonIndex == BUTTON.LEFT)
+    {
+      gamepad.axes[0] = pressed ? -1.0 : 0.0; 
+    }
+    else if(buttonIndex == BUTTON.RIGHT)
+    {
+      gamepad.axes[0] = pressed ? 1.0 : 0.0; 
+    }
+    else
+    {
+      let actualButtonIndex = 0;
+      switch(buttonIndex) {
+        case BUTTON.SELECT:
+          actualButtonIndex = gamepadImpl.primaryButtonIndex;
+          break;
+        case BUTTON.SQUEEZE:
+          actualButtonIndex = gamepadImpl.primarySqueezeButtonIndex;
+          break;
+        case BUTTON.THUMBSTICK:
+          actualButtonIndex = gamepadImpl.thumbstickButtonIndex;
+          break;
+        case BUTTON.AX:
+          actualButtonIndex = gamepadImpl.axButtonIndex;
+          break;
+        case BUTTON.BY:
+          actualButtonIndex = gamepadImpl.byButtonIndex;
+          break;
+      }
+
+      if (actualButtonIndex >= gamepad.buttons.length) { return; }
+      gamepad.buttons[actualButtonIndex].pressed = pressed;
+      gamepad.buttons[actualButtonIndex].value = pressed ? 1.0 : 0.0;
+    }
   }
 
   _initializeControllers(config) {
@@ -686,6 +710,7 @@ export default class EmulatedXRDevice extends XRDevice {
       const thumbstickButtonIndex = controller.thumbstickButtonIndex !== undefined ? controller.thumbstickButtonIndex : -1;
       const axButtonIndex = controller.axButtonIndex !== undefined ? controller.axButtonIndex : -1;
       const byButtonIndex = controller.byButtonIndex !== undefined ? controller.byButtonIndex : -1;
+
       this.gamepads.push(createGamepad(id, i === 0 ? 'right' : 'left', buttonNum, hasPosition));
       // @TODO: targetRayMode should be screen for right controller(pointer) in AR
       const imputSourceImpl = new GamepadXRInputSource(this, {}, primaryButtonIndex, primarySqueezeButtonIndex, thumbstickButtonIndex, axButtonIndex, byButtonIndex);

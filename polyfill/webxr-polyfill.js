@@ -5256,7 +5256,7 @@ to native implementations of the API.`;
                 }
                 class GamepadXRInputSource {
                   constructor(polyfill, display, primaryButtonIndex = 0, primarySqueezeButtonIndex = -1,
-                              axButtonIndex = -1, byButtonIndex = -1) {
+                    thumbstickButtonIndex = -1, axButtonIndex = -1, byButtonIndex = -1) {
                     this.polyfill = polyfill;
                     this.display = display;
                     this.nativeGamepad = null;
@@ -5273,6 +5273,7 @@ to native implementations of the API.`;
                     this.handedness = '';
                     this.targetRayMode = 'gaze';
                     this.armModel = null;
+                    this.thumbstickButtonIndex = thumbstickButtonIndex;
                     this.axButtonIndex = axButtonIndex;
                     this.byButtonIndex = byButtonIndex;
                   }
@@ -36430,8 +36431,9 @@ host this content on a secure origin for the best user experience.
                 const BUTTON = {
                   SELECT: 0,
                   SQUEEZE: 1,
-                  AX: 2,
-                  BY: 3
+                  THUMBSTICK: 2,
+                  AX: 3,
+                  BY: 4
                 };
                 class EmulatedXRDevice extends XRDevice {
                   constructor(global, config={}) {
@@ -36913,6 +36915,9 @@ host this content on a secure origin for the best user experience.
                       case BUTTON.SQUEEZE:
                         actualButtonIndex = gamepadImpl.primarySqueezeButtonIndex;
                         break;
+                      case BUTTON.THUMBSTICK:
+                        actualButtonIndex = gamepadImpl.thumbstickButtonIndex;
+                        break;
                       case BUTTON.AX:
                         actualButtonIndex = gamepadImpl.axButtonIndex;
                         break;
@@ -36938,10 +36943,11 @@ host this content on a secure origin for the best user experience.
                       const buttonNum = controller.buttonNum || 0;
                       const primaryButtonIndex = controller.primaryButtonIndex !== undefined ? controller.primaryButtonIndex : 0;
                       const primarySqueezeButtonIndex = controller.primarySqueezeButtonIndex !== undefined ? controller.primarySqueezeButtonIndex : -1;
+                      const thumbstickButtonIndex = controller.thumbstickButtonIndex !== undefined ? controller.thumbstickButtonIndex : -1;
                       const axButtonIndex = controller.axButtonIndex !== undefined ? controller.axButtonIndex : -1;
                       const byButtonIndex = controller.byButtonIndex !== undefined ? controller.byButtonIndex : -1;
                       this.gamepads.push(createGamepad(id, i === 0 ? 'right' : 'left', buttonNum, hasPosition));
-                      const imputSourceImpl = new GamepadXRInputSource(this, {}, primaryButtonIndex, primarySqueezeButtonIndex, axButtonIndex, byButtonIndex);
+                      const imputSourceImpl = new GamepadXRInputSource(this, {}, primaryButtonIndex, primarySqueezeButtonIndex, thumbstickButtonIndex, axButtonIndex, byButtonIndex);
                       imputSourceImpl.active = !this.arDevice;
                       this.gamepadInputSources.push(imputSourceImpl);
                     }
@@ -36963,6 +36969,9 @@ host this content on a secure origin for the best user experience.
                         }
                         if (inputSourceImpl.primarySqueezeButtonIndex !== -1) {
                           gamepad.buttons[inputSourceImpl.primarySqueezeButtonIndex].pressed = false;
+                        }
+                        if (inputSourceImpl.thumbstickButtonIndex !== -1) {
+                          gamepad.buttons[inputSourceImpl.thumbstickButtonIndex].pressed = false;
                         }
                         if (inputSourceImpl.axButtonIndex !== -1) {
                           gamepad.buttons[inputSourceImpl.axButtonIndex].pressed = false;

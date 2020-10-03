@@ -133,8 +133,9 @@ const DEVICE = {
 const BUTTON = {
   SELECT: 0,
   SQUEEZE: 1,
-  AX: 2,
-  BY: 3
+  THUMBSTICK: 2,
+  AX: 3,
+  BY: 4
 };
 
 const ASSET_PATH = {};
@@ -154,11 +155,13 @@ const states = {
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER] = {};
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.SELECT] = false;
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.SQUEEZE] = false;
+states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.THUMBSTICK] = false;
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.AX] = false;
 states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.BY] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER] = {};
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SELECT] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SQUEEZE] = false;
+states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.THUMBSTICK] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.AX] = false;
 states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.BY] = false;
 
@@ -171,6 +174,7 @@ deviceCapabilities[DEVICE.CONTROLLER] = {
   hasPosition: false,
   hasRotation: false,
   hasSqueezeButton: false,
+  hasThumbstickButton: false,
   hasAXButton: false,
   hasBYButton: false
 };
@@ -421,6 +425,7 @@ const updateAssetNodes = (deviceDefinition) => {
   if (assetNodes[DEVICE.RIGHT_CONTROLLER]) {
     states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.SELECT] = false;
     states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.SQUEEZE] = false;
+    states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.THUMBSTICK] = false;
     states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.AX] = false;
     states.buttonPressed[DEVICE.RIGHT_CONTROLLER][BUTTON.BY] = false;
     updateControllerColor(DEVICE.RIGHT_CONTROLLER);
@@ -428,6 +433,7 @@ const updateAssetNodes = (deviceDefinition) => {
   if (assetNodes[DEVICE.LEFT_CONTROLLER]) {
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SELECT] = false;
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SQUEEZE] = false;
+    states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.THUMBSTICK] = false;
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.AX] = false;
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.BY] = false;
     updateControllerColor(DEVICE.LEFT_CONTROLLER);
@@ -458,6 +464,7 @@ const updateAssetNodes = (deviceDefinition) => {
   deviceCapabilities[DEVICE.CONTROLLER].hasPosition = false;
   deviceCapabilities[DEVICE.CONTROLLER].hasRotation = false;
   deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton = false;
+  deviceCapabilities[DEVICE.CONTROLLER].hasThumbstickButton = false;
   deviceCapabilities[DEVICE.CONTROLLER].hasAXButton = false;
   deviceCapabilities[DEVICE.CONTROLLER].hasBYButton = false;
   document.getElementById('stereoEffectLabel').style.display = 'none';
@@ -470,16 +477,20 @@ const updateAssetNodes = (deviceDefinition) => {
   document.getElementById('leftSelectButton').style.display = 'none';
   document.getElementById('rightSqueezeButton').style.display = 'none';
   document.getElementById('leftSqueezeButton').style.display = 'none';
+  document.getElementById('leftThumbstickButton').style.display = 'none';
+  document.getElementById('rightThumbstickButton').style.display = 'none';
   document.getElementById('rightAXButton').style.display = 'none';
   document.getElementById('leftAXButton').style.display = 'none';
   document.getElementById('rightBYButton').style.display = 'none';
   document.getElementById('leftBYButton').style.display = 'none';
   updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.SELECT, false);
   updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.SQUEEZE, false);
+  updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.THUMBSTICK, false);
   updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.AX, false);
   updateTriggerButtonColor(DEVICE.RIGHT_CONTROLLER, BUTTON.BY, false);
   updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.SELECT, false);
   updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.SQUEEZE, false);
+  updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.THUMBSTICK, false);
   updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.AX, false);
   updateTriggerButtonColor(DEVICE.LEFT_CONTROLLER, BUTTON.BY, false);
 
@@ -495,6 +506,7 @@ const updateAssetNodes = (deviceDefinition) => {
   deviceCapabilities[DEVICE.CONTROLLER].hasPosition = hasRightController && deviceDefinition.controllers[0].hasPosition;
   deviceCapabilities[DEVICE.CONTROLLER].hasRotation = hasRightController && deviceDefinition.controllers[0].hasRotation;
   deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton = hasRightController && deviceDefinition.controllers[0].hasSqueezeButton;
+  deviceCapabilities[DEVICE.CONTROLLER].hasThumbstickButton = hasRightController && deviceDefinition.controllers[0].hasThumbstickButton;
   deviceCapabilities[DEVICE.CONTROLLER].hasAXButton = hasRightController && deviceDefinition.controllers[0].hasAXButton;
   deviceCapabilities[DEVICE.CONTROLLER].hasBYButton = hasRightController && deviceDefinition.controllers[0].hasBYButton;
 
@@ -523,6 +535,9 @@ const updateAssetNodes = (deviceDefinition) => {
     if (deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton) {
       document.getElementById('rightSqueezeButton').style.display = '';
     }
+    if (deviceCapabilities[DEVICE.CONTROLLER].hasThumbstickButton) {
+      document.getElementById('rightThumbstickButton').style.display = '';
+    }
     if (deviceCapabilities[DEVICE.CONTROLLER].hasAXButton) {
       document.getElementById('rightAXButton').style.display = '';
     }
@@ -538,6 +553,9 @@ const updateAssetNodes = (deviceDefinition) => {
     }
     if (deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton) {
       document.getElementById('leftSqueezeButton').style.display = '';
+    }
+    if (deviceCapabilities[DEVICE.CONTROLLER].hasThumbstickButton) {
+      document.getElementById('leftThumbstickButton').style.display = '';
     }
     if (deviceCapabilities[DEVICE.CONTROLLER].hasAXButton) {
       document.getElementById('leftAXButton').style.display = '';
@@ -557,7 +575,8 @@ const updateAssetNodes = (deviceDefinition) => {
 const updateControllerColor = (key) => {
   const node = assetNodes[key];
   const pressed = states.buttonPressed[key][BUTTON.SELECT] || states.buttonPressed[key][BUTTON.SQUEEZE] || 
-                  states.buttonPressed[key][BUTTON.AX] || states.buttonPressed[key][BUTTON.BY];
+                  states.buttonPressed[key][BUTTON.THUMBSTICK] || states.buttonPressed[key][BUTTON.AX] || 
+                  states.buttonPressed[key][BUTTON.BY];
   node.traverse(object => {
     if (!object.material) {
       return;
@@ -695,6 +714,9 @@ const updateTriggerButtonColor = (key, buttonKey, pressed) => {
     case BUTTON.SQUEEZE:
       buttonId += 'Squeeze';
       break;
+    case BUTTON.THUMBSTICK:
+      buttonId += 'Thumbstick';
+      break;
     case BUTTON.AX:
       buttonId += 'AX';
       break;
@@ -786,6 +808,14 @@ document.getElementById('rightSqueezeButton').addEventListener('click', event =>
 
 document.getElementById('leftSqueezeButton').addEventListener('click', event => {
   toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.SQUEEZE);
+}, false);
+
+document.getElementById('leftThumbstickButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.LEFT_CONTROLLER, BUTTON.THUMBSTICK);
+}, false);
+
+document.getElementById('rightThumbstickButton').addEventListener('click', event => {
+  toggleButtonPressed(DEVICE.RIGHT_CONTROLLER, BUTTON.THUMBSTICK);
 }, false);
 
 document.getElementById('rightAXButton').addEventListener('click', event => {

@@ -43,6 +43,7 @@
           "hasPosition": true,
           "hasRotation": true,
           "hasSqueezeButton": true,
+          "hasThumbstickButton": false,
           "hasAXButton": false,
           "hasBYButton": false
         },
@@ -54,6 +55,7 @@
           "hasPosition": true,
           "hasRotation": true,
           "hasSqueezeButton": true,
+          "hasThumbstickButton": false,
           "hasAXButton": false,
           "hasBYButton": false
         }
@@ -78,6 +80,7 @@
           "hasPosition": false,
           "hasRotation": true,
           "hasSqueezeButton": false,
+          "hasThumbstickButton": false,
           "hasAXButton": false,
           "hasBYButton": false
         }
@@ -100,11 +103,13 @@
           "buttonNum": 7,
           "primaryButtonIndex": 1,
           "primarySqueezeButtonIndex": 2,
+          "thumbstickButtonIndex": 0,
           "axButtonIndex": 3,
           "byButtonIndex": 4,
           "hasPosition": true,
           "hasRotation": true,
           "hasSqueezeButton": true,
+          "hasThumbstickButton": true,
           "hasAXButton": true,
           "hasBYButton": true
         },
@@ -113,11 +118,13 @@
           "buttonNum": 7,
           "primaryButtonIndex": 1,
           "primarySqueezeButtonIndex": 2,
+          "thumbstickButtonIndex": 0,
           "axButtonIndex": 3,
           "byButtonIndex": 4,
           "hasPosition": true,
           "hasRotation": true,
           "hasSqueezeButton": true,
+          "hasThumbstickButton": true,
           "hasAXButton": true,
           "hasBYButton": true
         }
@@ -143,6 +150,7 @@
           "primaryButtonIndex": 0,
           "hasPosition": true,
           "hasRotation": true,
+          "hasThumbstickButton": false,
           "hasAXButton": false,
           "hasBYButton": false
         },
@@ -151,6 +159,7 @@
           "primaryButtonIndex": 0,
           "hasPosition": true,
           "hasRotation": true,
+          "hasThumbstickButton": false,
           "hasAXButton": false,
           "hasBYButton": false
         }
@@ -183,6 +192,7 @@
           "primaryButtonIndex": 0,
           "hasPosition": false,
           "hasRotation": true,
+          "hasThumbstickButton": false,
           "hasAXButton": false,
           "hasBYButton": false
         }

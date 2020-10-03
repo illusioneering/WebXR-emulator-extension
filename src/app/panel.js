@@ -170,7 +170,9 @@ deviceCapabilities[DEVICE.HEADSET] = {
 deviceCapabilities[DEVICE.CONTROLLER] = {
   hasPosition: false,
   hasRotation: false,
-  hasSqueezeButton: false
+  hasSqueezeButton: false,
+  hasAXButton: false,
+  hasBYButton: false
 };
 
 const transformControls = {};
@@ -426,8 +428,8 @@ const updateAssetNodes = (deviceDefinition) => {
   if (assetNodes[DEVICE.LEFT_CONTROLLER]) {
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SELECT] = false;
     states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.SQUEEZE] = false;
-    states.buttonPressed[DEVICE.property][BUTTON.AX] = false;
-    states.buttonPressed[DEVICE.property][BUTTON.BY] = false;
+    states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.AX] = false;
+    states.buttonPressed[DEVICE.LEFT_CONTROLLER][BUTTON.BY] = false;
     updateControllerColor(DEVICE.LEFT_CONTROLLER);
   }
 
@@ -456,6 +458,8 @@ const updateAssetNodes = (deviceDefinition) => {
   deviceCapabilities[DEVICE.CONTROLLER].hasPosition = false;
   deviceCapabilities[DEVICE.CONTROLLER].hasRotation = false;
   deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton = false;
+  deviceCapabilities[DEVICE.CONTROLLER].hasAXButton = false;
+  deviceCapabilities[DEVICE.CONTROLLER].hasBYButton = false;
   document.getElementById('stereoEffectLabel').style.display = 'none';
   document.getElementById('headsetComponent').style.display = 'none';
   document.getElementById('rightControllerComponent').style.display = 'none';
@@ -491,6 +495,8 @@ const updateAssetNodes = (deviceDefinition) => {
   deviceCapabilities[DEVICE.CONTROLLER].hasPosition = hasRightController && deviceDefinition.controllers[0].hasPosition;
   deviceCapabilities[DEVICE.CONTROLLER].hasRotation = hasRightController && deviceDefinition.controllers[0].hasRotation;
   deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton = hasRightController && deviceDefinition.controllers[0].hasSqueezeButton;
+  deviceCapabilities[DEVICE.CONTROLLER].hasAXButton = hasRightController && deviceDefinition.controllers[0].hasAXButton;
+  deviceCapabilities[DEVICE.CONTROLLER].hasBYButton = hasRightController && deviceDefinition.controllers[0].hasBYButton;
 
   const hasPosition = deviceCapabilities[DEVICE.HEADSET].hasPosition ||
     deviceCapabilities[DEVICE.CONTROLLER].hasPosition;
@@ -513,11 +519,15 @@ const updateAssetNodes = (deviceDefinition) => {
     document.getElementById('rightControllerComponent').style.display = 'flex';
     if (hasImmersiveVR) {
       document.getElementById('rightSelectButton').style.display = '';
-      document.getElementById('rightAXButton').style.display = '';
-      document.getElementById('rightBYButton').style.display = '';
     }
     if (deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton) {
       document.getElementById('rightSqueezeButton').style.display = '';
+    }
+    if (deviceCapabilities[DEVICE.CONTROLLER].hasAXButton) {
+      document.getElementById('rightAXButton').style.display = '';
+    }
+    if (deviceCapabilities[DEVICE.CONTROLLER].hasBYButton) {
+      document.getElementById('rightBYButton').style.display = '';
     }
   }
 
@@ -525,11 +535,15 @@ const updateAssetNodes = (deviceDefinition) => {
     document.getElementById('leftControllerComponent').style.display = 'flex';
     if (hasImmersiveVR) {
       document.getElementById('leftSelectButton').style.display = '';
-      document.getElementById('leftAXButton').style.display = '';
-      document.getElementById('leftBYButton').style.display = '';
     }
     if (deviceCapabilities[DEVICE.CONTROLLER].hasSqueezeButton) {
       document.getElementById('leftSqueezeButton').style.display = '';
+    }
+    if (deviceCapabilities[DEVICE.CONTROLLER].hasAXButton) {
+      document.getElementById('leftAXButton').style.display = '';
+    }
+    if (deviceCapabilities[DEVICE.CONTROLLER].hasBYButton) {
+      document.getElementById('leftBYButton').style.display = '';
     }
   }
 

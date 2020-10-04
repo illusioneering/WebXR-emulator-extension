@@ -1,4 +1,8 @@
-# WebXR emulator extension
+# WebXR Emulator Extension for Oculus Quest
+
+This project is a fork of Mozilla's [WebXR emulator extension](https://github.com/MozillaReality/WebXR-emulator-extension), which could only simulate input for two controller buttons.   This version supports all the buttons on the Oculus Touch controller, including the thumbstick axes.  The emulator should also continue to work for devices other than the Oculus Quest, but this has not been tested.  In order to install it, you will need to check out the code from this repository and enable developer mode in your browser's extension page, which will enable you to load unpacked extensions.
+
+## Original Description
 
 WebXR emulator extension is a browser extension which helps your WebXR content creation. It enables to responsively run [WebXR](https://www.w3.org/TR/webxr/) application on your **desktop** browser without the need of any XR devices. 
 
